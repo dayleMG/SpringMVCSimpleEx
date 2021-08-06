@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import simpleSpringMVC.itemservice.domain.item.Item;
 import simpleSpringMVC.itemservice.domain.repo.ItemRepo;
 
@@ -68,12 +69,26 @@ public class BasicItemController {
         return "/basic/item";
     }
 
-    @PostMapping("/add")
+//    @PostMapping("/add")
     public String addItemV4(Item item) {
         itemRepo.save(item);
         return "/basic/item";
     }
 
+    //Post -> Redirect -> Get으로 변경 웹페이지를 새로고침할경우 add반복을 막기위해
+//    @PostMapping("/add")
+    public String addItemV5(Item item) {
+        itemRepo.save(item);
+        return  "redirect:/basic/items/" + item.getId();
+    }
+
+    @PostMapping("/add")
+    public String addItemV6(Item item, RedirectAttributes redirectAttributes) {
+        Item savedItem = itemRepo.save(item);
+        redirectAttributes.addAttribute("itemId", savedItem.getId());
+        redirectAttributes.addAttribute("status", true);
+        return  "redirect:/basic/items/{itemId}";
+    }
 
     @GetMapping("/{itemId}/edit")
     public String editForm(@PathVariable Long itemId, Model model) {
