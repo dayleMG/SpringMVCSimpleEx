@@ -1,6 +1,7 @@
 package simpleSpringMVC.itemservice.web;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +16,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/basic/items")
 @RequiredArgsConstructor
+@Slf4j
 public class BasicItemController {
 
     private final ItemRepo itemRepo;
@@ -85,6 +87,7 @@ public class BasicItemController {
 
     @PostMapping("/add")
     public String addItemV6(Item item, RedirectAttributes redirectAttributes) {
+        log.info("item.open={}", item.getOpen());
         Item savedItem = itemRepo.save(item);
         redirectAttributes.addAttribute("itemId", savedItem.getId());
         redirectAttributes.addAttribute("status", true);
