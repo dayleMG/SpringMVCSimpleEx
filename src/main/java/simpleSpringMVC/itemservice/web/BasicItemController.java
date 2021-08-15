@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import simpleSpringMVC.itemservice.domain.item.Item;
+import simpleSpringMVC.itemservice.domain.item.ItemType;
 import simpleSpringMVC.itemservice.domain.repo.ItemRepo;
 
 import javax.annotation.PostConstruct;
@@ -30,6 +31,12 @@ public class BasicItemController {
         regions.put("BUSAN", "부산");
         regions.put("JEJU", "제주");
         return regions;
+    }
+
+    @ModelAttribute("itemTypes")
+    public ItemType[] itemTypes() {
+        ItemType[] values = ItemType.values();
+        return values;
     }
 
     @GetMapping
@@ -102,6 +109,7 @@ public class BasicItemController {
     public String addItemV6(Item item, RedirectAttributes redirectAttributes) {
         log.info("item.open={}", item.getOpen());
         log.info("regions={}", item.getRegions());
+        log.info("item.itemType={}", item.getItemType());
 
         Item savedItem = itemRepo.save(item);
         redirectAttributes.addAttribute("itemId", savedItem.getId());
