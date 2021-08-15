@@ -11,7 +11,9 @@ import simpleSpringMVC.itemservice.domain.item.Item;
 import simpleSpringMVC.itemservice.domain.repo.ItemRepo;
 
 import javax.annotation.PostConstruct;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/basic/items")
@@ -20,6 +22,15 @@ import java.util.List;
 public class BasicItemController {
 
     private final ItemRepo itemRepo;
+
+    @ModelAttribute("regions")
+    public Map<String, String> regions(){
+        Map<String, String> regions = new LinkedHashMap<>();
+        regions.put("SEOUL", "서울");
+        regions.put("BUSAN", "부산");
+        regions.put("JEJU", "제주");
+        return regions;
+    }
 
     @GetMapping
     public String items(Model model) {
@@ -39,6 +50,8 @@ public class BasicItemController {
     public String addForm(Model model) {
         model.addAttribute("item", new Item());
         return "/basic/addForm";
+
+
     }
 
 //    @PostMapping("/add")
@@ -88,6 +101,8 @@ public class BasicItemController {
     @PostMapping("/add")
     public String addItemV6(Item item, RedirectAttributes redirectAttributes) {
         log.info("item.open={}", item.getOpen());
+        log.info("regions={}", item.getRegions());
+
         Item savedItem = itemRepo.save(item);
         redirectAttributes.addAttribute("itemId", savedItem.getId());
         redirectAttributes.addAttribute("status", true);
